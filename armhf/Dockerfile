@@ -1,5 +1,5 @@
 # Docker image of ownCloud Server (Community) on PHP 7.
-# Copyright (C) 2017 Rodrigo Martínez <dev@brunneis.com>
+# Copyright (C) 2017-2018 Rodrigo Martínez <dev@brunneis.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -12,43 +12,43 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-FROM ubuntu:16.04
+FROM brunneis/ubuntu-armhf:xenial
 MAINTAINER "Rodrigo Martínez" <dev@brunneis.com>
 
 ################################################
 # OWNCLOUD X
 ################################################
 
-ENV OWNCLOUD_VERSION 10.0.0
+ENV OWNCLOUD_VERSION 10.0.7
 
 RUN \
 apt-get update && apt-get upgrade -y \
 && apt-get install -y \
-	curl \
-	bzip2 \
-	apache2 \
-	mariadb-server \
-	libapache2-mod-php7.0 \
-	php-gd \
-	php-zip \
-	php-mysql \
-	php-pgsql \
-	php-imap \
-	php-ldap \
-	php-gmp \
-	php-json \
-	php-curl \
-	php-intl \
-	php-mcrypt \
-	php-imagick \
-	php-xml \
-	php-mbstring \
-	php-smbclient \
-	php-apcu \
-	php-memcached \
-	php-redis \
-	php-sqlite3 \
-	php-bz2 \
+        curl \
+        bzip2 \
+        apache2 \
+        mariadb-server \
+        libapache2-mod-php7.0 \
+        php-gd \
+        php-zip \
+        php-mysql \
+        php-pgsql \
+        php-imap \
+        php-ldap \
+        php-gmp \
+        php-json \
+        php-curl \
+        php-intl \
+        php-mcrypt \
+        php-imagick \
+        php-xml \
+        php-mbstring \
+        php-smbclient \
+        php-apcu \
+        php-memcached \
+        php-redis \
+        php-sqlite3 \
+        php-bz2 \
 && rm -rf /var/lib/apt/lists/*
 
 ENV HTML_DIR /var/www/html
@@ -59,16 +59,16 @@ VOLUME $HTML_DIR/config
 VOLUME $HTML_DIR/apps
 
 RUN curl -fsSL -o owncloud.tar.bz2 \
-		"https://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2" \
-	&& curl -fsSL -o owncloud.tar.bz2.asc \
-		"https://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2.asc" \
-	&& export GNUPGHOME="$(mktemp -d)" \
+                "https://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2" \
+        && curl -fsSL -o owncloud.tar.bz2.asc \
+                "https://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2.asc" \
+        && export GNUPGHOME="$(mktemp -d)" \
 # gpg key from https://owncloud.org/owncloud.asc
-	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys E3036906AD9F30807351FAC32D5D5E97F6978A26 \
-	&& gpg --batch --verify owncloud.tar.bz2.asc owncloud.tar.bz2 \
-	&& rm -r "$GNUPGHOME" owncloud.tar.bz2.asc \
-	&& tar -xjf owncloud.tar.bz2 -C /usr/src/ \
-	&& rm owncloud.tar.bz2
+        && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys E3036906AD9F30807351FAC32D5D5E97F6978A26 \
+        && gpg --batch --verify owncloud.tar.bz2.asc owncloud.tar.bz2 \
+        && rm -r "$GNUPGHOME" owncloud.tar.bz2.asc \
+        && tar -xjf owncloud.tar.bz2 -C /usr/src/ \
+        && rm owncloud.tar.bz2
 
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
